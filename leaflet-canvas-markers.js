@@ -16,12 +16,12 @@
             p.x += img.offset.x; p.y += img.offset.y;
             if (img.rotate) {
                 this._ctx.save();
-                this._ctx.translate(p.x, p.y);
+                this._ctx.translate(p.x - img.size[0] / 2, p.y - img.size[1] / 2);
                 this._ctx.rotate(img.rotate * Math.PI / 180);
-                this._ctx.drawImage(img.el, -img.size[0] / 2, -img.size[1] / 2, img.size[0], img.size[1]);
+                this._ctx.drawImage(img.el, 0, 0;
                 this._ctx.restore();
             } else {
-                this._ctx.drawImage(img.el, p.x - img.size[0] / 2, p.y - img.size[1] / 2, img.size[0], img.size[1]);
+                this._ctx.drawImage(img.el, p.x - img.size[0] / 2, p.y - img.size[1] / 2);
             }
         },
     });
