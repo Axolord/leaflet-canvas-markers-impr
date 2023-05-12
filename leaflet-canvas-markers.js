@@ -1,6 +1,6 @@
 'use strict';
 
-(function (root, factory) {
+((root, factory) => {
     if (typeof define === 'function' && define.amd) {
         define(['leaflet'], factory);
     } else if (typeof exports === 'object') {
@@ -8,35 +8,28 @@
     } else {
         factory(window.L);
     }
-}(this, function (L) {
+})(this, (L) => {
     L.Canvas.include({
         _updateImg(layer) {
             const { img } = layer.options;
             const p = layer._point.round();
-            p.x += img.offset.x; p.y += img.offset.y;
+            p.x -= img.iconAnchor.x; p.y -= img.iconAnchor.y;
             if (img.rotate) {
                 this._ctx.save();
-                this._ctx.translate(p.x - img.size[0] / 2, p.y - img.size[1] / 2);
+                this._ctx.translate(p.x, p.y);
                 this._ctx.rotate(img.rotate * Math.PI / 180);
-                this._ctx.drawImage(img.el, 0, 0;
+                this._ctx.drawImage(img.el, 0, 0, img.size[0], img.size[1]);
                 this._ctx.restore();
             } else {
-                this._ctx.drawImage(img.el, p.x - img.size[0] / 2, p.y - img.size[1] / 2);
+                this._ctx.drawImage(img.el, p.x, p.y,img.size[0], img.size[1]);
             }
         },
     });
 
-    const angleCrds = (map, prevLatlng, latlng) => {
-        if (!latlng || !prevLatlng) return 0;
-        const pxStart = map.project(prevLatlng);
-        const pxEnd = map.project(latlng);
-        return Math.atan2(pxStart.y - pxEnd.y, pxStart.x - pxEnd.x) / Math.PI * 180 - 90;
-    };
-
     const defaultImgOptions = {
         rotate: 0,
         size: [40, 40],
-        offset: { x: 0, y: 0 },
+        iconAnchor: { x: 20, y: 20 },
     };
 
     const CanvasMarker = L.CircleMarker.extend({
@@ -44,7 +37,6 @@
             if (!this.options.img || !this.options.img.url) return;
             if (!this.options.img.el) {
                 this.options.img = {...defaultImgOptions, ...this.options.img};
-                this.options.img.rotate += angleCrds(this._map, this.options.prevLatlng, this._latlng);
                 const img = document.createElement('img');
                 img.src = this.options.img.url;
                 this.options.img.el = img;
@@ -60,7 +52,7 @@
         },
     });
 
-    L.canvasMarker = function (...opt) {
+    L.canvasMarker = (...opt) => {
         try {
             const i = opt.findIndex(o => typeof o === 'object' && o.img);
             if (i+1) {
@@ -70,4 +62,4 @@
         } catch(e) {}
         return new CanvasMarker(...opt);
     };
-}));
+});

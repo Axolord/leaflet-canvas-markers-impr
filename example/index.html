@@ -108,7 +108,7 @@
                         url: point.img,
                         size: point.imgSize,
                         rotate: point.imgRotate || 0,
-                        offset: point.offset || { x: 0, y: 0 },
+                        iconAnchor: {x: point.imgSize[0] / 2, y: point.imgSize[1] / 2},
                     },
                 }).bindPopup(coordinatesPopup).addTo(map);
                 break;
