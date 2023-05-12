@@ -26,5 +26,8 @@
   "homepage": "https://github.com/Axolord/leaflet-canvas-markers-impr",
   "peerDependencies": {
     "leaflet": "^1.0.0"
+  },
+  "directories": {
+    "example": "example"
   }
 }
